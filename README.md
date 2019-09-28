@@ -218,6 +218,10 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
 * **Layout**
   * `LOAD_LAYOUT`
     * Changes the active Launchpad layout and loads another user layout. (argument 1) is the name of the layout file without the `.LPHKlayout` suffix.
+  * `SET_COLOR`
+    * Changes the color of a single button.
+	* (argument 1) is the new color in the format `r,g,b` with each value ranging from 0 to 255.
+	* Optionally, (argument 2) and (argument 3) may specify the button in x- and y-coordinates ranging from 0 to 8 each. If not supplied, the color of the pressed button is changed.
 
 For the `PRESS`, `RELEASE`, and `TAP` commands, all single character non-whitespace keys and the following key names are allowed:
 * `alt`
