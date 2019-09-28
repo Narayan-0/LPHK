@@ -135,6 +135,8 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
 * **Script execution control**
   * `DELAY`
     * Delays the script for (argument 1) seconds.
+  * `EXIT`
+    * Quits the script.
   * `GOTO_LABEL`
     * Goto label (argument 1).
   * `IF_PRESSED_GOTO_LABEL`
