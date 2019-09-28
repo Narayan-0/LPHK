@@ -132,7 +132,7 @@ Any line that starts with a dash `-` will be considered a comment, and will be i
 ### Commands List
 Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text file with newlines seperating commands.
 
-* **Utility**
+* **Script execution control**
   * `DELAY`
     * Delays the script for (argument 1) seconds.
   * `GOTO_LABEL`
@@ -147,19 +147,20 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
     * If the button the script is bound to is not pressed, goto label (argument 1) a maximum of (argument 2) times.
   * `LABEL`
     * Sets a label named (argument 1) for use with the `*GOTO_LABEL` commands.
-  * `OPEN`
-    * Opens the file or folder (argument 1).
   * `REPEAT_LABEL`
     * Goto label (argument 1) a maximum of (argument 2) times.
   * `RESET_REPEATS`
     * Reset the counter on all repeats. (no arguments)
+  * `WAIT_UNPRESSED`
+    * Waits until the button the script is bound to is unpressed. (no arguments)
+* **Utility**
+  * `OPEN`
+    * Opens the file or folder (argument 1).
   * `SOUND`
     * Play a sound named (argument 1) inside the `user_sounds/` folder.
       * Supports `.wav`, `.flac`, and `.ogg` only.
     * If (argument 2) supplied, set volume to (argument 2).
       * Range is 0 to 100
-  * `WAIT_UNPRESSED`
-    * Waits until the button the script is bound to is unpressed. (no arguments)
   * `WEB`
     * Open website (argument 1) in default browser.
   * `WEB_NEW`
@@ -214,6 +215,7 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
     * Sets the absolute cursor posistion to (argument 1) horizontal and (argument 2) vertical.
   * `M_STORE`
     * Stores the current mouse position for use with the `M_RECALL*` commands.
+* **Layout**
   * `LOAD_LAYOUT`
     * Changes the active Launchpad layout and loads another user layout. (argument 1) is the name of the layout file without the `.LPHKlayout` suffix.
 
