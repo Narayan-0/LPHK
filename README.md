@@ -141,6 +141,8 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
     * If the button the script is bound to is pressed, goto label (argument 1).
   * `IF_PRESSED_REPEAT_LABEL`
     * If the button the script is bound to is pressed, goto label (argument 1) a maximum of (argument 2) times.
+  * `IF_TOGGLED_GOTO_LABEL`
+    * If the button the script is bound to is in toggle state `on`, goto label (argument 1). See `TOGGLE` for detailed information about toggle states.
   * `IF_UNPRESSED_GOTO_LABEL`
     * If the button the script is bound to is not pressed, goto label (argument 1).
   * `IF_UNPRESSED_REPEAT_LABEL`
@@ -151,6 +153,10 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
     * Goto label (argument 1) a maximum of (argument 2) times.
   * `RESET_REPEATS`
     * Reset the counter on all repeats. (no arguments)
+  * `TOGGLE`
+    * Each button can have two toggle states: `on` or `off`. Default state is `off`. `TOGGLE` changes this state.
+	* If no arguments are supplied, the state is negated (`on` becomes `off` and vice versa).
+	* If (argument 1) is supplied, it specifies the new state in form of `on` or `off`
   * `WAIT_UNPRESSED`
     * Waits until the button the script is bound to is unpressed. (no arguments)
 * **Utility**

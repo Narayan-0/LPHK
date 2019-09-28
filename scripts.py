@@ -10,13 +10,14 @@ DELAY_EXIT_CHECK = 0.025
 
 import files
 
-VALID_COMMANDS = ["@ASYNC", "@SIMPLE", "STRING", "DELAY", "TAP", "PRESS", "RELEASE", "WEB", "WEB_NEW", "SOUND", "WAIT_UNPRESSED", "M_MOVE", "M_SET", "M_SCROLL", "M_LINE", "M_LINE_MOVE", "M_LINE_SET", "LABEL", "IF_PRESSED_GOTO_LABEL", "IF_UNPRESSED_GOTO_LABEL", "GOTO_LABEL", "REPEAT_LABEL", "IF_PRESSED_REPEAT_LABEL", "IF_UNPRESSED_REPEAT_LABEL", "M_STORE", "M_RECALL", "M_RECALL_LINE", "OPEN", "RELEASE_ALL", "RESET_REPEATS", "LOAD_LAYOUT", "SET_COLOR"]
+VALID_COMMANDS = ["@ASYNC", "@SIMPLE", "STRING", "DELAY", "TAP", "PRESS", "RELEASE", "WEB", "WEB_NEW", "SOUND", "WAIT_UNPRESSED", "M_MOVE", "M_SET", "M_SCROLL", "M_LINE", "M_LINE_MOVE", "M_LINE_SET", "LABEL", "IF_PRESSED_GOTO_LABEL", "IF_UNPRESSED_GOTO_LABEL", "GOTO_LABEL", "REPEAT_LABEL", "IF_PRESSED_REPEAT_LABEL", "IF_UNPRESSED_REPEAT_LABEL", "M_STORE", "M_RECALL", "M_RECALL_LINE", "OPEN", "RELEASE_ALL", "RESET_REPEATS", "LOAD_LAYOUT", "SET_COLOR", "TOGGLE", "IF_TOGGLED_GOTO_LABEL"]
 ASYNC_HEADERS = ["@ASYNC", "@SIMPLE"]
 
 threads = [[None for y in range(9)] for x in range(9)]
 running = False
 to_run = []
 text = [["" for y in range(9)] for x in range(9)]
+toggles = [[False for y in range(9)] for x in range(9)]
 
 def schedule_script(script_in, x, y):
     global threads
@@ -520,11 +521,19 @@ def run_script(script_str, x, y):
                 color = split_line[1].split(",")
                 x1 = x
                 y1 = y
-                if split_line[1] != "" and split_line[2] != "":
+                if len(split_line) > 2:
                     x1 = int(split_line[1])
                     x2 = int(split_line[2])
                 lp_colors.setXY(x1, y1, [int(color[0]), int(color[1]), int(color[2])])
                 lp_colors.updateXY(x1, y1)
+            elif split_line[0] == "TOGGLE":
+                new = not toggles[x][y]
+                if len(split_line) > 1:
+                    new = split_line[1] == "on"
+                toggles[x][y] = new
+            elif split_line[0] == "IF_TOGGLED_GOTO_LABEL":
+                if toggles[x][y]:
+                    return labels[split_line[1]]
             else:
                 print("[scripts] " + coords + "    Invalid command: " + split_line[0] + ", skipping...")
         return idx + 1
