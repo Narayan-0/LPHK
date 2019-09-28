@@ -216,6 +216,7 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
     * Stores the current mouse position for use with the `M_RECALL*` commands.
   * `LOAD_LAYOUT`
     * Changes the active Launchpad layout and loads another user layout. (argument 1) is the name of the layout file without the `.LPHKlayout` suffix.
+
 For the `PRESS`, `RELEASE`, and `TAP` commands, all single character non-whitespace keys and the following key names are allowed:
 * `alt`
 * `alt_gr`
