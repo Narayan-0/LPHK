@@ -1,0 +1,11 @@
+-- Example of a toggle button toggling it's color between red and green
+
+IF_TOGGLED_GOTO_LABEL toggled
+
+SET_COLOR 0,255,0
+TOGGLE
+EXIT
+
+LABEL toggled
+SET_COLOR 255,0,0
+TOGGLE
