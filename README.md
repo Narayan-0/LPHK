@@ -164,6 +164,10 @@ Commands follow the format: `COMMAND arg1 arg2 ...`. Scripts are just a text fil
 * **Utility**
   * `OPEN`
     * Opens the file or folder (argument 1).
+  * `SELECT_WINDOW`
+    * Sets the focus to an open window of your operating system and displays it in the foreground. This is useful to ensure following keyboard commands to be sent to the correct application, or just to switch between applications.
+	* (argument 1) has to be a regular expression identifiying the window title of the window to be selected. In the most simple case, it can be just a substring of the title. Examples: `YouTube`, `Firefox|Chrome`.
+	* This command is currently only implemented for Windows operating systems and will not work on Linux!
   * `SOUND`
     * Play a sound named (argument 1) inside the `user_sounds/` folder.
       * Supports `.wav`, `.flac`, and `.ogg` only.
