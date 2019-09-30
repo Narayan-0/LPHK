@@ -15,6 +15,7 @@ try:
 
         def _window_enum_callback(self, hwnd, wildcard):
             """Pass to win32gui.EnumWindows() to check all the opened windows"""
+            print(str(win32gui.GetWindowText(hwnd)))
             if re.match(wildcard, str(win32gui.GetWindowText(hwnd))) is not None:
                 self._handle = hwnd
 
@@ -30,7 +31,10 @@ try:
     def select_window(title_regex):
         w = WindowMgr()
         w.find_window_wildcard(title_regex)
-        w.set_foreground()
+        if w._handle is None:
+            print("[windows] No window found matching '" + title_regex + "'. Ignoring command SELECT_WINDOW.")
+        else:
+            w.set_foreground()
 
 except ImportError:
     print("WARNING: Window utilities like SELECT_WINDOW are currently only implemented for Windows operating systems. These commands will not work on your system. :(")
