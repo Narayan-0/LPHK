@@ -37,11 +37,13 @@ lp_connected = False
 lp_mode = None
 colors_to_set = [[DEFAULT_COLOR for y in range(9)] for x in range(9)]
 
-def init(lp_object_in, launchpad_in):
+def init(lp_object_in, launchpad_in, options_in = []):
     global lp_object
     global launchpad
+    global options
     lp_object = lp_object_in
     launchpad = launchpad_in
+    options = options_in
 
     make()
 
@@ -177,14 +179,17 @@ class Main_Window(tk.Frame):
         files.curr_layout = None
         self.draw_canvas()
 
-    def load_layout(self):
+    def load_layout(self, name=None):
         self.modified_layout_save_prompt()
-        name = tk.filedialog.askopenfilename(parent=app,
+        add_path = True
+        if name is None:
+            name = tk.filedialog.askopenfilename(parent=app,
                                           initialdir=os.getcwd() + files.LAYOUT_PATH,
                                           title="Load layout...",
                                           filetypes=layout_filetypes)
+            add_path = False
         if name:
-            files.load_layout(name, False)
+            files.load_layout(name, add_path)
             self.draw_canvas()
 
     def save_layout_as(self):
@@ -553,6 +558,13 @@ def make():
     root.protocol("WM_DELETE_WINDOW", close)
     root.resizable(False, False)
     app = Main_Window(root)
+
+    if "autoconnect" in options:
+        app.connect_lp()
+        if "loadlayout" in options:
+            name = options[0]
+            app.load_layout(name)
+
     app.mainloop()
 
 def close():

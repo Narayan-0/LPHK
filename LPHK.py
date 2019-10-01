@@ -2,8 +2,6 @@
 
 import sys, os
 
-EXIT_ON_WINDOW_CLOSE = True
-
 try:
     import launchpad_py as launchpad
 except ImportError:
@@ -19,18 +17,31 @@ PATH = sys.path[0]
 lp = launchpad.Launchpad()
 
 def init():
-    global EXIT_ON_WINDOW_CLOSE
-    if len(sys.argv) > 1:
-        if ("--debug" in sys.argv) or ("-d" in sys.argv):
-            EXIT_ON_WINDOW_CLOSE = False
+    args = sys.argv.copy()
+    options = []
+    
+    while len(args) > 1:  # args[0] = script name
+        arg = args.pop();
+        
+        if (arg == "--debug") or (arg == "-d"):
+            options.append("debug");
             print("[LPHK] Debugging mode active! Will not shut down on window close.")
             print("[LPHK] Run shutdown() to manually close the program correctly.")
+            
+        elif arg == "--autoconnect":
+            options.append("autoconnect");
+            
+        elif arg.startswith("--layout="):
+            options.append("loadlayout");
+            options.insert(0, arg[9:])
 
         else:
-            print("[LPHK] Invalid argument: " + sys.argv[1] + ". Ignoring...")
+            print("[LPHK] Invalid argument: " + arg + ". Ignoring...")
 
     files.init(PATH)
     sound.init(PATH)
+    
+    return options
 
 def shutdown():
     if lp_events.timer != None:
@@ -50,9 +61,9 @@ def shutdown():
     sys.exit("[LPHK] Shutting down...")
 
 def main():
-    init()
-    window.init(lp, launchpad)
-    if EXIT_ON_WINDOW_CLOSE:
+    options = init()
+    window.init(lp, launchpad, options)
+    if not "debug" in options:
         shutdown()
 
 main()

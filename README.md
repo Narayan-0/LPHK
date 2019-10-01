@@ -75,6 +75,13 @@ Before using the program, there are some dependencies/libraries that you will ne
   * At this point, you should be able to use whatever functionality the program currently has.
   * If you have errors (or nothing happens), run the script in the command line by running "python3 LPHK.py" in the LPHK directory. Please open an issue on GitHub and copy the output when trying and failing to run via command prompt.
     * (If this fails, use "python LPHK.py".)
+* Optional command line arguments for `LPHK.py`:
+  * `--autoconnect`
+    * Connects to Launchpad device automatically on startup.
+  * `--layout=<name>`
+    * Loads a layout file automatically on startup.
+	* `<name>` has to be the name of a layout file in the `user_layouts` directory without the `.LPHKlayout` suffix.
+	* Does only work in combination with the `--autoconnect` option.
 
 ### Program Usage (Post-Install)
 * Before starting the program, make sure your Launchpad Classic/Mini/S or MkII (for now, Pro is coming) is connected to the computer.
