@@ -15,7 +15,6 @@ try:
 
         def _window_enum_callback(self, hwnd, wildcard):
             """Pass to win32gui.EnumWindows() to check all the opened windows"""
-            print(str(win32gui.GetWindowText(hwnd)))
             if re.match(wildcard, str(win32gui.GetWindowText(hwnd))) is not None:
                 self._handle = hwnd
 
