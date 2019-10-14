@@ -120,7 +120,6 @@ def updateXY(x, y):
                 lp_object.LedCtrlXY(x, y, set_color[0]//64, set_color[1]//64)
             else:
                 if (curr_color_modes[x][y] == "solid") or is_func_key:
-                    print(type(set_color))
                     #pulse and flash only work on main grid
                     if type(set_color) is list:
                         lp_object.LedCtrlXYByRGB(x, y, [c//4 for c in set_color])
