@@ -523,7 +523,7 @@ def run_script(script_str, x, y):
                     color = int(color)
                 except:
                     color = color.split(",")
-                    if len(color != 3):
+                    if len(color) != 3:
                         print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
                         return idx + 1
                     try:
@@ -540,7 +540,7 @@ def run_script(script_str, x, y):
                     if len(split_line) > 3:
                         x1 = int(split_line[2])
                         x2 = int(split_line[3])
-                    lp_colors.setXY(x1, y1, color)
+                    lp_colors.setXY(x1, y1, color, "solid")
                     lp_colors.updateXY(x1, y1)
             elif split_line[0] == "TOGGLE":
                 new = not toggles[x][y]
