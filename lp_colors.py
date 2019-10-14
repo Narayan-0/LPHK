@@ -1,5 +1,6 @@
 curr_colors = [[[0,0,0] for y in range(9)] for x in range(9)]
 color_modes = [["solid" for y in range(9)] for x in range(9)]
+curr_color_modes = [["solid" for y in range(9)] for x in range(9)]
 
 import lp_events, scripts, window
 import colorsys
@@ -61,8 +62,10 @@ def RGB_to_RG(rgb):
     else:
         return rgb
 
-def setXY(x, y, color):
+def setXY(x, y, color, mode = None):
     curr_colors[x][y] = color
+    if mode is not None:
+        color_modes[x][y] = mode
 
 def getXY(x, y):
     return curr_colors[x][y]
@@ -78,6 +81,8 @@ def list_RGB_to_string(color):
 
 def getXY_RGB(x, y):
     color = getXY(x, y)
+    if type(color) is int:
+        color = code_to_RGB(color)
     color_string = list_RGB_to_string(color)
     return color_string
 
@@ -98,38 +103,49 @@ def updateXY(x, y):
 
             if is_running:
                 set_color = scripts.COLOR_PRIMED
-                color_modes[x][y] = "flash"
+                curr_color_modes[x][y] = "flash"
             elif (x, y) in [l[1:] for l in scripts.to_run]:
                 if is_func_key:
                     set_color = scripts.COLOR_FUNC_KEYS_PRIMED
                 else:
                     set_color = scripts.COLOR_PRIMED
-                    color_modes[x][y] = "pulse"
+                    curr_color_modes[x][y] = "pulse"
             else:
                 set_color = curr_colors[x][y]
-                color_modes[x][y] = "solid"
+                curr_color_modes[x][y] = color_modes[x][y]
 
             if window.lp_mode == "Mk1":
                 if type(set_color) is int:
                     set_color = code_to_RGB(set_color)
                 lp_object.LedCtrlXY(x, y, set_color[0]//64, set_color[1]//64)
             else:
-                if (color_modes[x][y] == "solid") or is_func_key:
+                if (curr_color_modes[x][y] == "solid") or is_func_key:
+                    print(type(set_color))
                     #pulse and flash only work on main grid
                     if type(set_color) is list:
                         lp_object.LedCtrlXYByRGB(x, y, [c//4 for c in set_color])
-                    else:
+                    elif type(set_color) is int:
                         lp_object.LedCtrlXYByCode(x, y, set_color)
-                elif color_modes[x][y] == "pulse":
-                    lp_object.LedCtrlPulseXYByCode(x, y, set_color)
-                elif color_modes[x][y] == "flash":
-                    lp_object.LedCtrlXYByCode(x, y, 0)
-                    lp_object.LedCtrlFlashXYByCode(x, y, set_color)
+                    else:
+                        print("[lp_colors] (" + str(x) + ", " + str(y) + ") Cannot update color because of wrong type")
+                elif curr_color_modes[x][y] == "pulse":
+                    if type(set_color) is int:
+                        lp_object.LedCtrlPulseXYByCode(x, y, set_color)
+                    else:
+                        print("[lp_colors] (" + str(x) + ", " + str(y) + ") Cannot update color because of wrong type")
+                elif curr_color_modes[x][y] == "flash":
+                    if type(set_color) is int:
+                        lp_object.LedCtrlXYByCode(x, y, 0)
+                        lp_object.LedCtrlFlashXYByCode(x, y, set_color)
+                    else:
+                        print("[lp_colors] (" + str(x) + ", " + str(y) + ") Cannot update color because of wrong type")
                 else:
                     if type(set_color) is list:
                         lp_object.LedCtrlXYByRGB(x, y, [c//4 for c in set_color])
-                    else:
+                    elif type(set_color) is int:
                         lp_object.LedCtrlXYByCode(x, y, set_color)
+                    else:
+                        print("[lp_colors] (" + str(x) + ", " + str(y) + ") Cannot update color because of wrong type")
     else:
         print("[lp_colors] (" + str(x) + ", " + str(y) + ") Launchpad is disconnected, cannot update.")
 

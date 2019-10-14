@@ -10,7 +10,7 @@ DELAY_EXIT_CHECK = 0.025
 
 import files
 
-VALID_COMMANDS = ["@ASYNC", "@SIMPLE", "STRING", "DELAY", "TAP", "PRESS", "RELEASE", "WEB", "WEB_NEW", "SOUND", "WAIT_UNPRESSED", "M_MOVE", "M_SET", "M_SCROLL", "M_LINE", "M_LINE_MOVE", "M_LINE_SET", "LABEL", "IF_PRESSED_GOTO_LABEL", "IF_UNPRESSED_GOTO_LABEL", "GOTO_LABEL", "REPEAT_LABEL", "IF_PRESSED_REPEAT_LABEL", "IF_UNPRESSED_REPEAT_LABEL", "M_STORE", "M_RECALL", "M_RECALL_LINE", "OPEN", "RELEASE_ALL", "RESET_REPEATS", "LOAD_LAYOUT", "SET_COLOR", "TOGGLE", "IF_TOGGLED_GOTO_LABEL", "EXIT", "SELECT_WINDOW"]
+VALID_COMMANDS = ["@ASYNC", "@SIMPLE", "STRING", "DELAY", "TAP", "PRESS", "RELEASE", "WEB", "WEB_NEW", "SOUND", "WAIT_UNPRESSED", "M_MOVE", "M_SET", "M_SCROLL", "M_LINE", "M_LINE_MOVE", "M_LINE_SET", "LABEL", "IF_PRESSED_GOTO_LABEL", "IF_UNPRESSED_GOTO_LABEL", "GOTO_LABEL", "REPEAT_LABEL", "IF_PRESSED_REPEAT_LABEL", "IF_UNPRESSED_REPEAT_LABEL", "M_STORE", "M_RECALL", "M_RECALL_LINE", "OPEN", "RELEASE_ALL", "RESET_REPEATS", "LOAD_LAYOUT", "SET_COLOR", "TOGGLE", "IF_TOGGLED_GOTO_LABEL", "EXIT", "SELECT_WINDOW", "SET_COLOR_MODE"]
 ASYNC_HEADERS = ["@ASYNC", "@SIMPLE"]
 
 threads = [[None for y in range(9)] for x in range(9)]
@@ -518,14 +518,30 @@ def run_script(script_str, x, y):
             elif split_line[0] == "LOAD_LAYOUT":
                 files.load_layout(split_line[1])
             elif split_line[0] == "SET_COLOR":
-                color = split_line[1].split(",")
-                x1 = x
-                y1 = y
-                if len(split_line) > 2:
-                    x1 = int(split_line[1])
-                    x2 = int(split_line[2])
-                lp_colors.setXY(x1, y1, [int(color[0]), int(color[1]), int(color[2])])
-                lp_colors.updateXY(x1, y1)
+                color = split_line[1]
+                try:
+                    color = int(color)
+                except:
+                    color = color.split(",")
+                    if len(color != 3):
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        return idx + 1
+                    try:
+                        color = [int(color[0]), int(color[1]), int(color[2])]
+                    except:
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        return idx + 1
+                    if color[0] > 50 or color[1] > 50 or color[2] > 50:
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        return idx + 1
+                finally:
+                    x1 = x
+                    y1 = y
+                    if len(split_line) > 3:
+                        x1 = int(split_line[2])
+                        x2 = int(split_line[3])
+                    lp_colors.setXY(x1, y1, color)
+                    lp_colors.updateXY(x1, y1)
             elif split_line[0] == "TOGGLE":
                 new = not toggles[x][y]
                 if len(split_line) > 1:
@@ -538,6 +554,26 @@ def run_script(script_str, x, y):
                 return -1
             elif split_line[0] == "SELECT_WINDOW":
                 windows.select_window(split_line[1])
+            elif split_line[0] == "SET_COLOR_MODE":
+                try:
+                    color = int(split_line[1])
+                except:
+                    print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                    return idx + 1
+                if color > 50:
+                    print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                    return idx + 1
+                mode = split_line[2]
+                if mode != "solid" and mode != "flash" and mode != "pulse":
+                    print("[scripts] " + coords + "    Invalid mode for command SET_COLOR_MODE")
+                    return idx + 1
+                x1 = x
+                y1 = y
+                if len(split_line) > 4:
+                    x1 = int(split_line[3])
+                    x2 = int(split_line[4])
+                lp_colors.setXY(x1, y1, color, mode)
+                lp_colors.updateXY(x1, y1)
             else:
                 print("[scripts] " + coords + "    Invalid command: " + split_line[0] + ", skipping...")
         return idx + 1
