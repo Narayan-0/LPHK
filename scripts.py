@@ -524,15 +524,15 @@ def run_script(script_str, x, y):
                 except:
                     color = color.split(",")
                     if len(color) != 3:
-                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR")
                         return idx + 1
                     try:
                         color = [int(color[0]), int(color[1]), int(color[2])]
                     except:
-                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR")
                         return idx + 1
                     if color[0] > 50 or color[1] > 50 or color[2] > 50:
-                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR_MODE")
+                        print("[scripts] " + coords + "    Invalid color for command SET_COLOR")
                         return idx + 1
                 finally:
                     x1 = x
